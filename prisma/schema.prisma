@@ -1,0 +1,84 @@
+//#region SCHEMA CONFIG
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//#endregion
+
+//#region ENUMS
+enum permissions {
+  userCreate
+  userUpdate
+  userRead
+  userDelete
+}
+
+//#endregion
+
+//#region TOKEN
+model Token {
+  id      String  @id @unique @default(nanoid(12))
+  token   String  @unique
+  hasUsed Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tokens")
+}
+
+//#endregion
+
+//#region  PERMISSIONS
+
+model UserPermission {
+  id         String      @id @unique @default(nanoid(12))
+  userId     String
+  permission permissions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("userPermissions")
+}
+
+//#endregion
+
+//#region USER
+model User {
+  id        String  @id @unique @default(nanoid(12))
+  name      String
+  email     String  @unique
+  image     String?
+  password  String
+  isBlocked Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accesses        UserAccess[]
+  userPermissions UserPermission[]
+
+  @@map("users")
+}
+
+model UserAccess {
+  id     String @id @unique @default(nanoid(12))
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("userAccesses")
+}
+
+//#endregion
