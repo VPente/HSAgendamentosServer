@@ -10,16 +10,6 @@ datasource db {
 
 //#endregion
 
-//#region ENUMS
-enum permissions {
-  userCreate
-  userUpdate
-  userRead
-  userDelete
-}
-
-//#endregion
-
 //#region TOKEN
 model Token {
   id      String  @id @unique @default(nanoid(12))
@@ -34,37 +24,19 @@ model Token {
 
 //#endregion
 
-//#region  PERMISSIONS
-
-model UserPermission {
-  id         String      @id @unique @default(nanoid(12))
-  userId     String
-  permission permissions
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("userPermissions")
-}
-
-//#endregion
-
 //#region USER
 model User {
-  id        String  @id @unique @default(nanoid(12))
-  name      String
-  email     String  @unique
-  image     String?
-  password  String
-  isBlocked Boolean @default(false)
+  id       String  @id @unique @default(nanoid(12))
+  name     String
+  email    String  @unique
+  image    String?
+  password String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  accesses        UserAccess[]
-  userPermissions UserPermission[]
+  accesses UserAccess[]
+  salons   SalonProfessional[]
 
   @@map("users")
 }
@@ -80,5 +52,101 @@ model UserAccess {
 
   @@map("userAccesses")
 }
+
+//#endregion
+
+//#region ORGANIZATION
+
+//#region ORGANIZATION PERMISSIONS
+enum permissions {
+  hairdresser
+  manicure
+}
+
+model SalonUserPermission {
+  id          String      @id @unique @default(nanoid(12))
+  salonUserId String
+  permission  permissions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  salonUser SalonProfessional @relation(fields: [salonUserId], references: [id], onDelete: Cascade)
+
+  @@map("salonUserPermissions")
+}
+
+//#endregion
+
+model SalonProfessional {
+  id      String @id @unique @default(nanoid(12))
+  salonId String
+  userId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  salon                Salon                 @relation(fields: [salonId], references: [id], onDelete: Cascade)
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  salonUserPermissions SalonUserPermission[]
+
+  @@map("salonUsers")
+}
+
+model Salon {
+  id           String  @id @unique @default(nanoid(12))
+  name         String  @unique
+  description  String?
+  city         String
+  phoneNumber  String
+  address      String
+  documentCode String  @unique
+  bannerImage  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  salonProfessionals SalonProfessional[]
+
+  @@map("salons")
+}
+
+//#region PROCEDURES
+
+model Procedure {
+  id          String  @id @unique @default(nanoid(12))
+  name        String
+  description String?
+  price       Float // ou String
+  duration    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("procedures")
+}
+
+//#endregion
+//#region TIMETABLE
+model Timetable {
+  id        String @id @unique @default(nanoid(12))
+  salonId   String
+  startDate String
+  endDate   String
+  startTime String
+  endTime   String
+
+  //dayOfWeek Int
+
+  //openAt    String
+  //closeAt   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("timetables")
+}
+
+//#endregion
 
 //#endregion

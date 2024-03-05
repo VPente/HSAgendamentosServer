@@ -1,7 +1,7 @@
 {
-  "name": "jazz-participacoes",
+  "name": "hs-agendamentos",
   "version": "1.0.0",
-  "description": "API para o projeto Jazz Participações",
+  "description": "API para o projeto HS Agendamentos",
   "main": "index.js",
   "scripts": {
     "dev": "tsc --noEmit && ts-node-dev --respawn --exit-child --transpile-only --ignore-watch node_modules --clear src/server/index.ts",
@@ -12,7 +12,7 @@
   "prisma": {
     "seed": "ts-node-dev prisma/seed.ts"
   },
-  "author": "Carlos Pasquali Dev",
+  "author": "Vitor Penteado",
   "license": "ISC",
   "engines": {
     "node": "20.11.0"
