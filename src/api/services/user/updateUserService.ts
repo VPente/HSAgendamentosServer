@@ -5,7 +5,7 @@ interface IUpdateUserService {
   userId: string;
 }
 
-export async function updateUserService({ data, userId }: IUpdateUserService) {
+export function updateUserService({ data, userId }: IUpdateUserService) {
   return prisma.user.update({
     data,
     where: {

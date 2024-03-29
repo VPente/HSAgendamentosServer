@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { checkIfNaN } from '../../../utils/validator';
-import { forceAbsoluteNumber } from '../../../utils/dataHandler';
 import { findManyUserService } from '../../../services/user';
+import { forceAbsoluteNumber } from '../../../utils/dataHandler';
+import { checkIfNaN } from '../../../utils/validator';
 
 interface IQuery {
   filter: string;

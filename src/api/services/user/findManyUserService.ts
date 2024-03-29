@@ -14,29 +14,13 @@ export async function findManyUserService({ page, take, filter }: IFindManyUserS
     },
   };
 
-  const [usersData, count] = await prisma.$transaction([
+  const [users, count] = await prisma.$transaction([
     prisma.user.findMany({
       select: {
         id: true,
         name: true,
         email: true,
         image: true,
-        isBlocked: true,
-        accesses: {
-          select: {
-            createdAt: true,
-          },
-          take: 1,
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
-
-        userPermissions: {
-          select: {
-            permission: true,
-          },
-        },
       },
       take,
       skip: (page - 1) * take,
@@ -45,24 +29,12 @@ export async function findManyUserService({ page, take, filter }: IFindManyUserS
       },
       where,
     }),
-
     prisma.user.count({
       where,
     }),
   ]);
 
-  const users = usersData.map((user) => {
-    const lastAccess = user.accesses?.[0]?.createdAt || null;
-
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      isBlocked: user.isBlocked,
-      lastAccess,
-    };
-  });
+  
 
   return { users, count };
 }

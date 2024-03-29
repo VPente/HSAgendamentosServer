@@ -1,2 +1,2 @@
 export * from './checkHasAccountService';
-export * from '../../controllers/public/auth/recoveryPasswordController';
+// export * from '../../controllers/public/auth/recoveryPasswordController';

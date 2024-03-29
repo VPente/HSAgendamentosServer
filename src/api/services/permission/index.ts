@@ -1,2 +1,2 @@
-export * from './checkPermissionExistService';
-export * from './findManyPermissionService';
+// export * from './checkPermissionExistService';
+// export * from './findManyPermissionService';

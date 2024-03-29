@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ErrorMessage } from '../../error';
 import { IToken } from '../../../../types/token';
-import { decodeTokenService } from '../../token';
 import { findUserByIdService } from '../../../services/user';
+import { ErrorMessage } from '../../error';
+import { decodeTokenService } from '../../token';
 
 export async function tokenMiddleware(req: Request, _res: Response, next: NextFunction) {
   const { authorization } = req.headers;
@@ -20,14 +20,7 @@ export async function tokenMiddleware(req: Request, _res: Response, next: NextFu
 
     const { user } = decodeTokenService({ token }) as IToken;
 
-    const userData = await findUserByIdService({ userId: user.id });
-
-    if (userData.isBlocked) {
-      throw new ErrorMessage({
-        statusCode: '401 UNAUTHORIZED',
-        message: 'Usuário bloqueado.',
-      });
-    }
+   await findUserByIdService({ userId: user.id });
 
     req.user = user;
 

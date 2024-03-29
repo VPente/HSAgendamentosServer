@@ -1,3 +1,4 @@
-export * from './createUserController';
-export * from './updateUserController';
+export * from './deleteUserController';
 export * from './findManyUserController';
+export * from './updateUserController';
+

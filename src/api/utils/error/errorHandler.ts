@@ -4,7 +4,6 @@
 
 import { NextFunction, Request, Response } from 'express';
 import { ErrorMessage } from './ErrorMessage';
-import { sendErrorsToLogServer } from './sendErrorsToLogServer';
 import { handlePrismaErrors } from './handlePrismaErrors';
 
 export async function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
@@ -14,7 +13,6 @@ export async function errorHandler(err: Error, _req: Request, res: Response, _ne
     });
   }
 
-  sendErrorsToLogServer({ stack: err.stack });
 
   console.error('\n\n\n ❌ Error ❌ \n\n\n', 'Error Message: ', err.stack, '\n\n\n');
 

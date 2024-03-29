@@ -1,9 +1,9 @@
-import { Response, Request } from 'express';
 import { compare } from 'bcrypt';
-import { checkValues } from '../../../utils/validator';
-import { createUserAccessService, findUserByCredentialService } from '../../../services/user';
+import { Request, Response } from 'express';
+import { createUserAccessService, findFirstUser } from '../../../services/user';
 import { ErrorMessage } from '../../../utils/error';
 import { generateToken } from '../../../utils/token';
+import { checkValues } from '../../../utils/validator';
 
 interface IBody {
   email: string;
@@ -21,7 +21,16 @@ export async function loginController(req: Request, res: Response) {
 
   const lowerCaseCredential = email.toLowerCase();
 
-  const user = await findUserByCredentialService({ credential: lowerCaseCredential });
+  // const user = await findUserByCredentialService({ credential: lowerCaseCredential });
+
+  const user = await findFirstUser({where:{email:lowerCaseCredential}});
+
+  if (!user) {
+    throw new ErrorMessage({
+      statusCode: '403 FORBIDDEN',
+      message: 'Credenciais inválidas.',
+    });
+  }
 
   const validPassword = await compare(password, user.password || '');
 
@@ -29,13 +38,6 @@ export async function loginController(req: Request, res: Response) {
     throw new ErrorMessage({
       statusCode: '403 FORBIDDEN',
       message: 'Credenciais inválidas.',
-    });
-  }
-
-  if (user.isBlocked) {
-    throw new ErrorMessage({
-      statusCode: '403 FORBIDDEN',
-      message: 'Usuário bloqueado.',
     });
   }
 
@@ -52,9 +54,7 @@ export async function loginController(req: Request, res: Response) {
       id: user.id,
     },
   });
-
-  req.user = user;
-
+  
   return res.status(200).json({
     token,
   });

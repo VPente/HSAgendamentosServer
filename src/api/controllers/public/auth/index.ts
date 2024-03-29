@@ -1,3 +1,4 @@
 export * from './loginController';
-export * from './sendEmailToRecoveryPasswordController';
-export * from './recoveryPasswordController';
+// export * from './recoveryPasswordController';
+// export * from './sendEmailToRecoveryPasswordController';
+

@@ -61,6 +61,7 @@ model UserAccess {
 enum permissions {
   hairdresser
   manicure
+  admin
 }
 
 model SalonUserPermission {

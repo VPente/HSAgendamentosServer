@@ -1,8 +1,10 @@
 import { prisma } from '.';
-import { createAdmin } from './seeds';
+import { createAdmin, createSalon, createSalonAdmin } from './seeds';
 
 const main = async () => {
   await createAdmin();
+  await createSalon();
+  await createSalonAdmin();
 };
 
 main()
