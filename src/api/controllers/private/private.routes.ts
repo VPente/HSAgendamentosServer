@@ -9,7 +9,9 @@ import { deleteUserController, findManyUserController, updateUserController } fr
 // #endregion
 
 // #region UPLOAD
+
 import { uploadRouter } from '../../utils/upload/upload.routes';
+import { createSalonProfessionalController } from './salonProfessional';
 // import { privateUserCreateMiddleware } from '../../utils/middlewares/private';
 // #endregion
 
@@ -29,3 +31,5 @@ privateRouter.get('/users/list', findManyUserController);
 privateRouter.put('/users/update', updateUserController);
 // #endregion
 privateRouter.delete('/users/delete',deleteUserController);
+
+privateRouter.post('/professional/create', createSalonProfessionalController)
